@@ -101,6 +101,18 @@ describe('hx-target attribute', function() {
     btn.innerHTML.should.equal('Click Me!')
   })
 
+  it('updates only the targeted element and leaves the trigger and other elements untouched', function() {
+    this.server.respondWith('GET', '/test', 'Clicked!')
+    var btn = make('<button hx-target="#isolated-target" hx-get="/test">Click Me!</button>')
+    var decoy = make('<div id="isolated-decoy">Decoy</div>')
+    var target = make('<div id="isolated-target">Original</div>')
+    btn.click()
+    this.server.respond()
+    target.innerHTML.should.equal('Clicked!')
+    btn.innerHTML.should.equal('Click Me!')
+    decoy.innerHTML.should.equal('Decoy')
+  })
+
   it('targets an adjacent element properly w/ data-* prefix', function() {
     this.server.respondWith('GET', '/test', 'Clicked!')
     var btn = make('<button data-hx-target="#d1" data-hx-get="/test">Click Me!</button>')
