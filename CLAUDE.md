@@ -42,6 +42,6 @@ The baseline at the time of writing: 868 pass, 0 fail, 3 skipped. Coverage outpu
 
 - `npm run build` does not exist; the build script is `npm run dist`. `npm run ws-tests` points at a missing `test/ws-sse/`; ignore it.
 - `it.only`/`describe.only` only produce a lint *warning* (`mocha/no-exclusive-tests`, exit code stays 0) and would silently shrink the suite. Grep for `.only` before finishing.
-- `test:*` scripts run `playwright install`, which downloads browsers; this needs network on first run.
+- `test:chrome`, `test:firefox`, `test:webkit` and `test:all` each run `playwright install` first (browser download; needs network on first run). `test:debug` does not.
 - Don't touch `test/lib/`, `dist/ext/` (deprecated copies), or `www/content/` for code tasks.
 - Upstream takes code PRs against `dev`, not `master` (only docs-only `www/` PRs go to `master`), and asks for `npm run format` first. Keep changes small and test-backed; refactors with no behavior change are rejected.
