@@ -32,7 +32,7 @@ The baseline at the time of writing: 868 pass, 0 fail, 3 skipped. Coverage outpu
 
 - Mocha `describe`/`it` with `function()` (not arrows — `this.server` is used) and chai **`should`** style (`btn.innerHTML.should.equal('x')`; `should.equal(a, b)` for undefined/null). No semicolons, 2-space indent, `standard` style, and `space-before-function-paren: never` (`function() {}`).
 - Standard scaffold: `beforeEach` sets `this.server = makeServer()` (a few files, e.g. `hx-target.js`, use raw `sinon.fakeServer.create()`; copy the file you're editing) and calls `clearWorkArea()`; `afterEach` calls `this.server.restore()` and `clearWorkArea()`.
-- Per test: `this.server.respondWith('GET', '/test', 'body')` → `var el = make('<div hx-get="/test">…</div>')` → `el.click()` → `this.server.respond()` → assert. Requests are synchronous via the sinon fake server; there is no real network and no `await`/timers in the normal case.
+- Per test: `this.server.respondWith('GET', '/test', 'body')` → `var el = make('<div hx-get="/test">…</div>')` → `el.click()` → `this.server.respond()` → assert. Requests are synchronous via the sinon fake server (no real network). Tests that need a delay (`hx-trigger` delays, settling) take Mocha's `done` callback and use `setTimeout`; the suite has no `async`/`await`.
 - Tests that mutate `htmx.config` must restore it (save a copy in `beforeEach`/before the test, reassign in `afterEach`). Handlers registered with `htmx.on` must be removed with `htmx.off`.
 - Use unique ids and URLs inside a test since all tests share one `#work-area`.
 - Add tests to the existing file for the attribute/feature. A new test file would also need adding to the manual `<script>` list in `test/index.html` (browser-mode runner), which the automation doesn't use.
@@ -43,4 +43,4 @@ The baseline at the time of writing: 868 pass, 0 fail, 3 skipped. Coverage outpu
 - `it.only`/`describe.only` only produce a lint *warning* (`mocha/no-exclusive-tests`, exit code stays 0) and would silently shrink the suite. Grep for `.only` before finishing.
 - `test:*` scripts run `playwright install`, which downloads browsers; this needs network on first run.
 - Don't touch `test/lib/`, `dist/ext/` (deprecated copies), or `www/content/` for code tasks.
-- Per CONTRIBUTING, keep changes small and test-backed; refactors with no behavior change are rejected upstream.
+- Upstream takes code PRs against `dev`, not `master` (only docs-only `www/` PRs go to `master`), and asks for `npm run format` first. Keep changes small and test-backed; refactors with no behavior change are rejected.
