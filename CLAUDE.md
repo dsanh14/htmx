@@ -22,6 +22,7 @@ npm run test:chrome test/core/ajax.js   # one file (path is forwarded to web-tes
 npm test                                # lint + types-check + test:chrome (what CI runs; Node 20)
 npm run test:all                        # also Firefox + WebKit; slow, run only if asked
 npm run dist                            # regenerates dist/ — only for releases
+npx serve                               # dev server; open http://localhost:3000/test/ for the Mocha browser runner (serve isn't a devDependency; npx fetches it)
 ```
 
 A focused file run plus lint does not cover `types-check`; finish any change with the full `npm test`.
